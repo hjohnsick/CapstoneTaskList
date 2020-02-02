@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace CapstoneTaskList
 {
@@ -8,118 +9,112 @@ namespace CapstoneTaskList
         static void Main(string[] args)
 
         {
-            Console.WriteLine("Welcome to the Task Manager!");
-
-            List<string> taskList = new List<string>
             {
-                "\t1.  List tasks", "\t2.  Add task", "\t3.  Delete task", "\t4.  Mark task complete", "\t5.  Quit" 
+                Console.BackgroundColor = ConsoleColor.White;
+                Console.Clear();
+                Console.ForegroundColor = ConsoleColor.Black;
+            }
+            
+
+            Console.WriteLine("Welcome To The Task Manager!");
+
+            //Menu user will select from 
+            List<string> taskList = new List<string>
+            {"\t1.  List Tasks", "\t2.  Add Task", "\t3.  Delete Task", "\t4.  Mark Task Complete",
+            "\t5.  Quit" 
             };
 
-            PrintList(taskList);
-
+            //list of tasks
             List<Duties> displayTasks = new List<Duties>
             {
-                new Duties ("Edward", "trims hedges", DateTime.Parse("06/20/2020")),
+                new Duties ("Edward", "trim hedges", DateTime.Parse("06/20/2020")),
                 new Duties ("Terry", "clean pool", DateTime.Parse("05/13/2020")),
                 new Duties ("Stephanie", "clean gutters", DateTime.Parse("03/13/2020")),
-
             };
 
-            
-            string option = GetUserInput("\nWhat would you like to do?");
+            //to repeat the prompts
+            bool repeat = true;
 
-            if (option == "1")
+            while (repeat)
             {
-                PrintList(displayTasks);
-            }
-            else if (option == "2") //want to add user input to displayTasks needs to include employee, duty, and dueDate
-            {
-                
-                
-                bool keepAdding = true;
-                do
+                //prints task list to screen
+                foreach (string item in taskList)
                 {
-                    AddUserInputToList(taskList, "Enter employee, duty, and due date: ");
-                    keepAdding = KeepGoing("Do you have more tasks to add?", "n", "y");
+                    Console.WriteLine(item);
+                }
+                Console.WriteLine($"\nEnter the number for the task you wish to complete: ");
+                string input = Console.ReadLine();
+
+                //if user input is 1, it will display the task list
+                if (input == "1")
+                {
                     PrintList(displayTasks);
                 }
-                while (keepAdding);
+                //if user input is 2, it will prompt user to enter info
+                else if (input == "2")
+                {
+                    Console.WriteLine("\nEnter a name: ");
+                    string employee = Console.ReadLine();
+                    Console.WriteLine("\nEnter a task description: ");
+                    string duty = Console.ReadLine();
+                    Console.WriteLine("\nEnter a date in this format mm/dd/yyyy: ");
+                    string dueDate = Console.ReadLine();
 
-            }
-            else if (option == "3")//delete task
-            {
-                string deleteTask = GetUserInput("\nWhat task do you want to delete?");
+                    //inputs into display tasks list
+                    displayTasks.Add(new Duties(employee, duty, DateTime.Parse(dueDate)));
 
+                    Console.WriteLine("\nNew task was added.");
+                }
+                //delete task.  I couldn't figure out how to validate if the number entered is in range-prompt to enter a number in range
+                else if (input == "3")
+                {
+                    PrintList(displayTasks);
+                    Console.WriteLine("\nWhat task do you want to delete?: ");
+                    int index = int.Parse(Console.ReadLine());
+                    displayTasks.RemoveAt(index - 1);
 
-            }
-            else if (option == "4")//mark complete
-            {
-                string markComplete = GetUserInput("\nWhat task do you want to complete?");
+                    Console.WriteLine($"Task {index} was removed. ");
+                }
+                //mark task complete
+                else if (input == "4")
+                {
+                    Console.WriteLine("\nWhat task do you want to mark complete?: ");
+                    PrintList(displayTasks);
 
+                    int index = int.Parse(Console.ReadLine());
 
-            }
-            else
-            {
-                Console.WriteLine("\nHit enter to exit program");
+                    displayTasks[index - 1].Complete = true;
+                }
+                else if (input == "5")
+                {
+                    Console.WriteLine("\nGood Bye!");
+                    break;
+                }
+                Console.WriteLine("\nWould you like to return to the main menu? Please enter y/n");
+                if (Console.ReadLine().ToLower() == "n")
+                {
+                    Console.WriteLine("\nGood Bye!");
+                    repeat = false;
+                }
             }
         }
 
-        public static bool KeepGoing(string message, string option1, string option2)
-        {
-            string keepGoing = GetUserInput(message);
-            if (keepGoing == option1)
-            {
-                return false;
-            }
-            else if (keepGoing == option2)
-            {
-                return true;
-            }
-            else
-            {
-                return KeepGoing("Not valid! " + message, option1, option2);
-            }
-        }
 
-        public static void PrintList(List<Duties> taskList)
+      
+        //Method to print display tasks
+        public static void PrintList (List<Duties> taskList)
         {
             for (int i = 0; i < taskList.Count; i++)//have to input the fields from the duties class
             {
                 Console.WriteLine();
-                Console.WriteLine((i+1)+":");
+                Console.WriteLine((i + 1) + ":");
                 Console.WriteLine($"\t{taskList[i].Employee}");
                 Console.WriteLine($"\t{taskList[i].DueDate}");
                 Console.WriteLine($"\t{taskList[i].Duty}");
-                Console.WriteLine($"\t{taskList[i].Complete}");
+                Console.WriteLine(taskList[i].Complete == true ? "\tCompleted" : "\tNot Completed");
                 Console.WriteLine();
 
             }
         }
-        public static void PrintList(List<string> taskList)
-        {
-            for (int i = 0; i < taskList.Count; i++)
-            {
-                Console.WriteLine($"{taskList[i]}");
-            }
-        }
-
-
-        //Method to get userInput
-        public static string GetUserInput (string message)
-        {
-            Console.WriteLine(message);
-            return Console.ReadLine();
-        }
-        
-        //Method to add task
-       public static void AddUserInputToList(List<string>listOfStrings, string message)
-        {
-            string input = GetUserInput(message);
-            listOfStrings.Add(input);
-        }
-
-        
-
     }
-
 }
