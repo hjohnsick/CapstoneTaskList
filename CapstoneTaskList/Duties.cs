@@ -6,11 +6,13 @@ namespace CapstoneTaskList
 {
 
     class Duties
-    {
+    {   //fields
         private string employee;
         private string duty;
         private DateTime dueDate;
         private bool complete;
+
+        //properties
         public string Employee
         {
             get { return employee; }
@@ -37,6 +39,7 @@ namespace CapstoneTaskList
         {
 
         }
+        //overloaded constructors
         public Duties(string _employee, string _duty, DateTime _dueDate)
         {
             employee = _employee;

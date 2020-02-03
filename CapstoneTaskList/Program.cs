@@ -69,21 +69,37 @@ namespace CapstoneTaskList
                 else if (input == "3")
                 {
                     PrintList(displayTasks);
-                    Console.WriteLine("\nWhat task do you want to delete?: ");
-                    int index = int.Parse(Console.ReadLine());
-                    displayTasks.RemoveAt(index - 1);
 
-                    Console.WriteLine($"Task {index} was removed. ");
+                    try
+                    {
+                        Console.WriteLine("\nWhat task do you want to delete?: ");
+                        int index = int.Parse(Console.ReadLine());
+                        displayTasks.RemoveAt(index - 1);
+
+                        Console.WriteLine($"Task {index} was removed. ");
+                    }
+
+                    catch(Exception e)
+                    {
+                        Console.WriteLine(e.Message);
+                    }
                 }
                 //mark task complete
                 else if (input == "4")
                 {
                     Console.WriteLine("\nWhat task do you want to mark complete?: ");
                     PrintList(displayTasks);
+                    
+                    try 
+                    {
+                        int index = int.Parse(Console.ReadLine());
 
-                    int index = int.Parse(Console.ReadLine());
-
-                    displayTasks[index - 1].Complete = true;
+                        displayTasks[index - 1].Complete = true;
+                    }
+                    catch(Exception e) //if user enters incorrect input it will throw an exception.  Need to figure out how to make it loop back to question.
+                    {
+                        Console.WriteLine(e.Message);
+                    }
                 }
                 else if (input == "5")
                 {
